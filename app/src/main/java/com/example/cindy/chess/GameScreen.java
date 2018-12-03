@@ -33,16 +33,13 @@ public class GameScreen extends AppCompatActivity {
     private Button rookB;
     private Button bishopB;
 
-
-    private View.OnClickListener buttonListener;
-
-
     private int start = -1;
     private int end = -1;
     private boolean turn = true; //white's turn = true, black = false
     private boolean gameEnded = false;
     private char promoteC;
     private boolean requirePromote;
+    private boolean drawProposed = false;
 
     private Board b = new Board();
 
@@ -67,12 +64,6 @@ public class GameScreen extends AppCompatActivity {
         bishopB = findViewById(R.id.bishopB);
         rookB = findViewById(R.id.rookB);
         knightB = findViewById(R.id.knightB);
-
-
-        undoB.setOnClickListener(buttonListener);
-        drawB.setOnClickListener(buttonListener);
-        resignB.setOnClickListener(buttonListener);
-
 
         boardGrid = findViewById(R.id.boardGrid);
         displayText = findViewById(R.id.displayText);
@@ -108,9 +99,24 @@ public class GameScreen extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Log.d("index", Integer.toString(boardGrid.indexOfChild(view)));
+
                         if( gameEnded == true || ( requirePromote && promoteC == '/') ){
                             return;
                         }
+
+                        drawB.setText("Draw");
+                        if (drawProposed == true){
+                            turn = !turn;
+                            if(turn == true){
+                                displayText.setText("White's Turn.");
+                            }
+                            else{
+                                displayText.setText("Black's Turn.");
+                            }
+                            drawProposed = false;
+                            return;
+                        }
+
                         int[] coord = convert(boardGrid.indexOfChild(view));
                         if (start != -1) { //already a piece selected
                             boardGrid.getChildAt(start).setBackgroundColor(Color.TRANSPARENT);
@@ -184,22 +190,33 @@ public class GameScreen extends AppCompatActivity {
     }
 
     public void initializeButtons(){
-        buttonListener = new View.OnClickListener(){
+        View.OnClickListener buttonListener = new View.OnClickListener(){
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
 
-                        // do something when undo is clicked
+                        displayText.setText("undo button clicked");
 
                         break;
                     case R.id.drawB:
-
-                        // do something when draw is clicked
-
+                        turn = !turn;
+                        if(drawProposed == true){
+                            displayText.setText("Draw. Game Over.");
+                            //end the game.
+                        }
+                        if(turn == true) {
+                            displayText.setText("Draw Proposed. White's Turn. Touch anywhere on the board to decline.");
+                            drawB.setText("Draw?");
+                        }
+                        else{
+                            displayText.setText("Draw Proposed. Black's Turn. Touch anywhere on the board to decline.");
+                            drawB.setText("Draw?");
+                        }
+                        drawProposed = true;
                         break;
                     case R.id.resignB:
 
-                        // do something when resign is clicked
+                        displayText.setText("resign button clicked");
 
                         break;
                     default:
@@ -208,6 +225,9 @@ public class GameScreen extends AppCompatActivity {
 
             }
         };
+        undoB.setOnClickListener(buttonListener);
+        drawB.setOnClickListener(buttonListener);
+        resignB.setOnClickListener(buttonListener);
 
         View.OnClickListener promoteBListener = new View.OnClickListener(){
             public void onClick (View view){
