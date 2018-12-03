@@ -1,0 +1,47 @@
+
+Pawn Promote
+    in game_screen.xml
+        add buttons to select which piece to promote to
+        set them to invisible
+    in GameScreen.java
+        if a pawn moves to the end of board
+            set buttons to visible
+            turn the button click into a char
+            pass char into the method that makes the move
+
+
+White/Black Turn Display
+    in GameScreen.java
+        when turn==true
+            displayText set to "White's turn."
+
+Check Detect+Display
+    GameScreen.java
+        displayText set to "Check! White's turn."
+
+Checkmate Detect+Display
+    GameScreen.java
+        displayText set to "Checkmate! White wins."
+
+Undo - Implement
+
+AI  - Implement
+
+Draw - Implement
+
+Resign - Implement
+
+Save - Implement
+    Serialization
+    Offer to save
+    Set Title
+    Set Date
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Replays
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sort by Title
+Sort by Date
+Replay
+
+

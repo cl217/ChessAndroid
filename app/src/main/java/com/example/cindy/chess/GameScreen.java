@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.support.v7.widget.GridLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 
@@ -39,6 +37,7 @@ public class GameScreen extends AppCompatActivity {
         setContentView(R.layout.game_screen);
         undoB = findViewById(R.id.undoB);
         boardGrid = findViewById(R.id.boardGrid);
+        displayText = findViewById(R.id.displayText);
         b.initialize();
         displayBoard(b.board);
 
