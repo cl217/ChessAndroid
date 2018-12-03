@@ -20,6 +20,9 @@ public class GameScreen extends AppCompatActivity {
     private TextView displayText;
 
     private Button undoB;
+    private Button drawB;
+    private Button resignB;
+    private View.OnClickListener buttonListener;
 
     private int start = -1;
     private int end = -1;
@@ -36,6 +39,11 @@ public class GameScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_screen);
         undoB = findViewById(R.id.undoB);
+        drawB = findViewById(R.id.drawB);
+        resignB = findViewById(R.id.resignB);
+        undoB.setOnClickListener(buttonListener);
+        drawB.setOnClickListener(buttonListener);
+        resignB.setOnClickListener(buttonListener);
         boardGrid = findViewById(R.id.boardGrid);
         displayText = findViewById(R.id.displayText);
         b.initialize();
@@ -59,6 +67,31 @@ public class GameScreen extends AppCompatActivity {
                     temp.setText("  ");
                 }
                 temp.setGravity(Gravity.CENTER);
+
+                buttonListener = new View.OnClickListener(){
+                    public void onClick (View view){
+                        switch (view.getId()) {
+                            case R.id.undoB:
+
+                                // do something when undo is clicked
+
+                                break;
+                            case R.id.drawB:
+
+                                // do something when draw is clicked
+
+                                break;
+                            case R.id.resignB:
+
+                                // do something when resign is clicked
+
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                };
 
                 boardGrid.addView(temp, i);
                 boardGrid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
