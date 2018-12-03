@@ -22,9 +22,7 @@ public class HomeScreen extends AppCompatActivity {
         newGameB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Bundle bundle = new Bundle();
                 Intent intent = new Intent(HomeScreen.this, GameScreen.class);
-                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
