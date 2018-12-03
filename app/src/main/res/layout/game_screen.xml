@@ -7,6 +7,73 @@
     android:layout_height="match_parent"
     tools:context=".GameScreen">
 
+    <Button
+        android:id="@+id/rookB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="4dp"
+        android:text="Rook"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/drawB"
+        app:layout_constraintStart_toEndOf="@+id/knightB" />
+
+    <Button
+        android:id="@+id/bishopB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="4dp"
+        android:text="Bishop"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/resignB"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/aiB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="36dp"
+        android:text="AI"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/undoB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="36dp"
+        android:text="Undo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/aiB"
+        app:layout_constraintTop_toBottomOf="@+id/knightB"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/resignB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="36dp"
+        android:text="Resign"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/drawB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="36dp"
+        android:text="Draw"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/resignB"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/undoB" />
+
     <ImageView
         android:id="@+id/imageView19"
         android:layout_width="328dp"
@@ -42,19 +109,6 @@
 
     </android.support.v7.widget.GridLayout>
 
-    <Button
-        android:id="@+id/undoB"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="40dp"
-        android:text="Undo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.135"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
         android:id="@+id/displayText"
         android:layout_width="wrap_content"
@@ -64,38 +118,33 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="hello"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView19"
-        app:layout_constraintVertical_bias="0.176" />
+        app:layout_constraintVertical_bias="0.036" />
 
     <Button
-        android:id="@+id/drawB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="31dp"
-        android:layout_marginEnd="148dp"
-        android:layout_marginBottom="41dp"
-        android:text="Draw"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/undoB"
-        app:layout_constraintTop_toBottomOf="@+id/displayText" />
+        android:id="@+id/queenB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginBottom="4dp"
+        android:text="Queen"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/aiB"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/resignB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="83dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="40dp"
-        android:text="Resign"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/drawB"
-        app:layout_constraintTop_toBottomOf="@+id/imageView19" />
+        android:id="@+id/knightB"
+        android:layout_width="73dp"
+        android:layout_height="41dp"
+        android:text="Knight"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/queenB"
+        tools:layout_editor_absoluteY="389dp" />
 
 </android.support.constraint.ConstraintLayout>

@@ -311,12 +311,14 @@ public class Board {
      * @param c promote to
      * @return true if is valid promote move
      */
-    public boolean validPromote( int x1, int y1, int x2, int y2, char c ) {
+    public boolean validPromote( int x1, int y1, int x2, int y2 ) {
         //checks if x1 y1 x2 y2 is a pawn moving to the end of the board
         //checks if c is a valid piece to promote to
+        /*
         if (c != 'Q' && c != 'R' && c != 'N' && c != 'B' ) {
             return false;
         }
+        */
         // 1st: if piece is a pawn. 2nd: if validate a pawn's move. 3rd: Final move is at the end of the board
         if (board[y1][x1].type == 'P' && board[y1][x1].validMove(x1, y1, x2, y2) && (y2 == 0 || y2 == 7) ) {
             return true;

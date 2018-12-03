@@ -38,7 +38,8 @@ Save - Implement
     Set Date
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Replays
+Replays - Have to make an object because
+can't implement serializable to save a non object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sort by Title
 Sort by Date
