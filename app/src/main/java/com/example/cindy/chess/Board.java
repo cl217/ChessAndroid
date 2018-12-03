@@ -295,6 +295,7 @@ public class Board {
         board[y1][x1] = null;
         board[y2][x2] = p;
 
+
         //pawn needs to be promoted
         if( ( y2 == 0 || y2 == 7 ) && p.type == 'P' ) {
             promote( x2, y2, c );

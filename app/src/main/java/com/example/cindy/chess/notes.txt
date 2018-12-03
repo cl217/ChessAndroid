@@ -1,5 +1,5 @@
 
-Pawn Promote
+Pawn Promote - done
     in game_screen.xml
         add buttons to select which piece to promote to
         set them to invisible

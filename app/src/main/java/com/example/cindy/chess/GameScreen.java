@@ -81,6 +81,8 @@ public class GameScreen extends AppCompatActivity {
         displayBoard(b.board);
         initializeButtons(); //moved all initialize button stuff to this
 
+        displayText.setText("White's Turn.");
+
     }
 
 
@@ -106,7 +108,7 @@ public class GameScreen extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Log.d("index", Integer.toString(boardGrid.indexOfChild(view)));
-                        if( gameEnded == true ){
+                        if( gameEnded == true || ( requirePromote && promoteC == '/') ){
                             return;
                         }
                         int[] coord = convert(boardGrid.indexOfChild(view));
@@ -136,10 +138,15 @@ public class GameScreen extends AppCompatActivity {
     private void move() {
         int[] moveStart = convert(start);
         int[] moveEnd = convert(end);
-        promoteC = '/';
-        if (b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])) {
+        if (!requirePromote && b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])) {
             setPBVisible();
-            //wait for button click??
+            requirePromote = true;
+            TextView tempStart = (TextView) boardGrid.getChildAt(start);
+            TextView tempEnd = (TextView) boardGrid.getChildAt(end);
+            tempEnd.setText(tempStart.getText());
+            tempStart.setText("  ");
+            displayText.setText(displayText.getText()+" Promote!");
+            return;
         }
         if (b.valid(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, turn)) {
 
@@ -150,14 +157,17 @@ public class GameScreen extends AppCompatActivity {
             displayBoard(b.board);
             replay.addMove(start, end);
             turn = !turn;
+            if( turn ){
+                displayText.setText("White's turn.");
+            }else{
+                displayText.setText("Black's turn.");
+            }
             start = -1;
-
             //display check/checkmate/or regular message
-
         }
     }
 
-    private void reset(){
+    private void promoteReset(){
         promoteC = '/';
         requirePromote = false;
         queenB.setVisibility(View.INVISIBLE);
@@ -205,10 +215,10 @@ public class GameScreen extends AppCompatActivity {
                     case R.id.queenB: promoteC = 'Q'; break;
                     case R.id.bishopB: promoteC = 'B'; break;
                     case R.id.rookB: promoteC = 'R'; break;
-                    case R.id.knightB: promoteC = 'K'; break;
-                    default: promoteC = '/'; break;
+                    case R.id.knightB: promoteC = 'N'; break;
                 }
-
+                move();
+                promoteReset();
             }
         };
         queenB.setOnClickListener(promoteBListener);
