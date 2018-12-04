@@ -131,7 +131,9 @@ public class GameScreen extends AppCompatActivity {
                                 view.setBackgroundColor(Color.YELLOW);
                             }else {
                                 end = boardGrid.indexOfChild(view);
-                                move();
+                                int[] moveStart = convert(start);
+                                int[] moveEnd = convert(end);
+                                move( moveStart, moveEnd);
                             }
                         } else{
                             if(  b.board[coord[1]][coord[0]] != null && b.board[coord[1]][coord[0]].color == turn ) {
@@ -147,7 +149,7 @@ public class GameScreen extends AppCompatActivity {
     }
 
 
-    private void move() {
+    private void move( int[] moveStart, int[] moveEnd ) {
 
         drawB.setText("Draw");
         if (drawProposed == true){
@@ -162,8 +164,6 @@ public class GameScreen extends AppCompatActivity {
             return;
         }
 
-        int[] moveStart = convert(start);
-        int[] moveEnd = convert(end);
         if (!requirePromote && b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])) {
             setPBVisible();
             requirePromote = true;
@@ -178,12 +178,14 @@ public class GameScreen extends AppCompatActivity {
 
             //check if move puts other king in check
             boolean check = b.check(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, !turn);
-
+            Log.d("check", Boolean.toString(check));
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
+            b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
             displayBoard(b.board);
             replay.add(b);
             start = -1;
             //display check/checkmate/or regular message
+            Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
             if( b.checkmate(!turn)&& !check ){
                 gameEnded = true;
                 displayText.setText("Stalemate! Draw.");
@@ -240,16 +242,39 @@ public class GameScreen extends AppCompatActivity {
 
     public void initializeButtons(){
 
+        View.OnClickListener aiListener = new View.OnClickListener(){
+            public void onClick(View view ){
+                for( int y = 0; y < 8; y++ ) {
+                    for (int x = 0; x < 8; x++) {
+                        //finds every piece of color on board
+                        if (b.board[y][x] != null && b.board[y][x].color == turn) {
+                            //checks every space on board and see if its a valid move for that piece
+                            for (int y2 = 0; y2 < 8; y2++) {
+                                for (int x2 = 0; x2 < 8; x2++) {
+                                    if (b.valid(x, y, x2, y2, '/', turn)) {
+                                        int[] moveStart = {x, y};
+                                        int[] moveEnd = {x2, y2};
+                                        move(moveStart, moveEnd);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        aiB.setOnClickListener(aiListener);
+
         View.OnClickListener endBListener = new View.OnClickListener(){
             public void onClick (View view){
                 if( view.getId() == R.id.saveB ){
 
                 }
-                if( view.getId() == R.id.newGameB ){
-                    Intent intent = new Intent( GameScreen.this, GameScreen.class );
+                if( view.getId() == R.id.newGameB ) {
+                    Intent intent = new Intent(GameScreen.this, GameScreen.class);
                     startActivity(intent);
                 }
-                move();
                 promoteReset();
             }
         };
@@ -302,7 +327,9 @@ public class GameScreen extends AppCompatActivity {
                     case R.id.rookB: promoteC = 'R'; break;
                     case R.id.knightB: promoteC = 'N'; break;
                 }
-                move();
+                int[] moveStart = convert(start);
+                int[] moveEnd = convert(end);
+                move( moveStart, moveEnd);
                 promoteReset();
             }
         };

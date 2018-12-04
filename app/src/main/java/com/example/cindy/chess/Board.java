@@ -2,6 +2,7 @@ package com.example.cindy.chess;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -243,6 +244,13 @@ public class Board implements Serializable {
                     case 2: output = v; break;
                 }
             }
+
+            if( type == 'N' ){
+                if( board[y2][x2] != null && board[y1][x1].color == board[y2][x2].color){
+                    output = false;
+                }
+            }
+
         }
         if( output == false ) {
             return output;
@@ -311,7 +319,6 @@ public class Board implements Serializable {
      * @param y1 coord
      * @param x2 coord
      * @param y2 coord
-     * @param c promote to
      * @return true if is valid promote move
      */
     public boolean validPromote( int x1, int y1, int x2, int y2 ) {
@@ -486,6 +493,7 @@ public class Board implements Serializable {
          * cannot castle while in check, through a check(example: king moves 2 spot to the left but the 1st spot it
          * has to get through would have made it a check.), and to a location that will cause a check(2nd spot).
          */
+        Log.d("moveYet", Boolean.toString(board[y1][x1].moveYet));
         if( board[y1][x1].moveYet ) {
             return false;
         }
@@ -514,6 +522,13 @@ public class Board implements Serializable {
         }
 
         //castling to black's left
+        if( board[0][0] == null ){
+            Log.d("board[0][0]", "null");
+        }else{
+            Log.d("board[0][0]", board[0][0].name);
+            Log.d("board[0][0]", Character.toString(board[0][0].type));
+
+        }
         if(pieceColor == false && castleRight == false && board[0][0].type == 'R' && board[0][0].moveYet == false
                 && board[0][4].type == 'K' && board[0][4].moveYet == false && pathH(4,0,1,0) == true) {
             //1) current spot-> !check
