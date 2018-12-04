@@ -1,45 +1,28 @@
 
-Pawn Promote - done
-    in game_screen.xml
-        add buttons to select which piece to promote to
-        set them to invisible
-    in GameScreen.java
-        if a pawn moves to the end of board
-            set buttons to visible
-            turn the button click into a char
-            pass char into the method that makes the move
-
-
-White/Black Turn Display - done
-    in GameScreen.java
-        when turn==true
-            displayText set to "White's turn."
-
-Check Detect+Display - done
-    GameScreen.java
-        displayText set to "Check! White's turn."
-
-Checkmate Detect+Display - done
-    GameScreen.java
-        displayText set to "Checkmate! White wins."
+Board Display - DONE
+Pawn Promote - DONE
+White/Black Turn Display - DONE
+Check Detect+Display - DONE
+Checkmate Detect+Display - DONE
+AI  - DONE
+Draw - DONE
 
 Undo - Implement
-
-AI  - Implement
-
-Draw - Implement
+    -Can only undo the last move
+    -Revert both boardGrid, board.b
+    -Revert turn. (If it's black's move, and undo is pressed, undo last move (white's move) and go back to white's turn)
+    -Delete last move from replay arraylist
 
 Resign - Implement
 
 Save - Implement
     Serialization
-    Offer to save
+    Offer to save - done
     Set Title
-    Set Date
+        -Popup?
+        -ErrorChecks (no duplicates)
+    Set Date - Should be automatic
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Replays - Have to make an object because
-can't implement serializable to save a non object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Sort by Title
 Sort by Date
