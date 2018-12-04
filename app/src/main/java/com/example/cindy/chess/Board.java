@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
     /**
      * Game board
      */

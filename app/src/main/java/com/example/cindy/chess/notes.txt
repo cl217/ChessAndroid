@@ -15,11 +15,11 @@ White/Black Turn Display - done
         when turn==true
             displayText set to "White's turn."
 
-Check Detect+Display
+Check Detect+Display - done
     GameScreen.java
         displayText set to "Check! White's turn."
 
-Checkmate Detect+Display
+Checkmate Detect+Display - done
     GameScreen.java
         displayText set to "Checkmate! White wins."
 

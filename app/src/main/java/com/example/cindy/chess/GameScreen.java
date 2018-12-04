@@ -1,5 +1,6 @@
 package com.example.cindy.chess;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,8 @@ public class GameScreen extends AppCompatActivity {
     private Button knightB;
     private Button rookB;
     private Button bishopB;
+    private Button newGameB;
+    private Button saveB;
 
     private int start = -1;
     private int end = -1;
@@ -47,7 +50,7 @@ public class GameScreen extends AppCompatActivity {
       undoing promotions might take too much work otherwise
      */
     //to be saved for replay?
-    public static Replay replay = new Replay();
+    public static Replay replay;
 
 
     @Override
@@ -64,13 +67,16 @@ public class GameScreen extends AppCompatActivity {
         rookB = findViewById(R.id.rookB);
         knightB = findViewById(R.id.knightB);
 
+        saveB = findViewById(R.id.saveB);
+        newGameB = findViewById(R.id.newGameB);
+
         boardGrid = findViewById(R.id.boardGrid);
         displayText = findViewById(R.id.displayText);
 
         b.initialize();
         displayBoard(b.board);
         initializeButtons(); //moved all initialize button stuff to this
-
+        replay = new Replay();
         displayText.setText("White's Turn.");
 
     }
@@ -175,12 +181,13 @@ public class GameScreen extends AppCompatActivity {
 
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             displayBoard(b.board);
-            replay.addMove(start, end);
+            replay.add(b);
             start = -1;
             //display check/checkmate/or regular message
             if( b.checkmate(!turn)&& !check ){
                 gameEnded = true;
                 displayText.setText("Stalemate! Draw.");
+                endGame();
                 return;
             }
             if( check && b.checkmate(!turn) ){
@@ -190,6 +197,7 @@ public class GameScreen extends AppCompatActivity {
                 }else{
                     displayText.setText("Checkmate! Black wins.");
                 }
+                endGame();
                 return;
             }
             turn = !turn;
@@ -203,6 +211,15 @@ public class GameScreen extends AppCompatActivity {
             }
 
         }
+    }
+
+    private void endGame(){
+        aiB.setVisibility(View.INVISIBLE);
+        undoB.setVisibility(View.INVISIBLE);
+        drawB.setVisibility(View.INVISIBLE);
+        resignB.setVisibility(View.INVISIBLE);
+        saveB.setVisibility(View.VISIBLE);
+        newGameB.setVisibility(View.VISIBLE);
     }
 
     private void promoteReset(){
@@ -222,6 +239,24 @@ public class GameScreen extends AppCompatActivity {
     }
 
     public void initializeButtons(){
+
+        View.OnClickListener endBListener = new View.OnClickListener(){
+            public void onClick (View view){
+                if( view.getId() == R.id.saveB ){
+
+                }
+                if( view.getId() == R.id.newGameB ){
+                    Intent intent = new Intent( GameScreen.this, GameScreen.class );
+                    startActivity(intent);
+                }
+                move();
+                promoteReset();
+            }
+        };
+        saveB.setOnClickListener(endBListener);
+        newGameB.setOnClickListener(endBListener);
+
+
         View.OnClickListener buttonListener = new View.OnClickListener(){
             public void onClick (View view){
                 switch (view.getId()) {

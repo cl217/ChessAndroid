@@ -13,29 +13,19 @@ import java.util.ArrayList;
  * Have to make an object to be serialized
  */
 public class Replay implements Serializable {
-    ArrayList<Move> replay = new ArrayList<>();
+    ArrayList<Board> replay = new ArrayList<>();
+
+    public void add( Board b ){
+        replay.add(b);
+    }
 
     private static final String directory = "data";
     private static final String file = "replays";
-
-    public void addMove(int begin, int end){
-        replay.add(new Move(begin, end));
-    }
 
     public static Replay read() throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream( new FileInputStream(directory + File.separator + file));
         Replay replay = (Replay) ois.readObject();
         ois.close();
         return replay;
-    }
-
-    public class Move{
-        int begin;
-        int end;
-        public Move( int begin, int end){
-            this.begin = begin;
-            this.end = end;
-        }
-
     }
 }
