@@ -10,7 +10,7 @@ Pawn Promote - done
             pass char into the method that makes the move
 
 
-White/Black Turn Display
+White/Black Turn Display - done
     in GameScreen.java
         when turn==true
             displayText set to "White's turn."

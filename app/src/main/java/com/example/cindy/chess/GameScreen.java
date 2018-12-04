@@ -1,14 +1,14 @@
 package com.example.cindy.chess;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.File;
@@ -16,7 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 
 public class GameScreen extends AppCompatActivity {
@@ -82,17 +81,31 @@ public class GameScreen extends AppCompatActivity {
         int i = 0;
         for( int y = 0; y < 8; y++ ) {
             for (int x = 0; x < 8; x++) {
-                TextView temp = new TextView(this);
-                temp.setWidth(73);
-                temp.setHeight(73);
+                ImageView temp = new ImageView(this);
+                temp.setLayoutParams(new LinearLayout.LayoutParams(73, 73));
 
                 if (board[y][x] != null){
-                    temp.setText(board[y][x].name);
-                    temp.setTypeface(null, Typeface.BOLD);
+                    Integer res = 0;
+                    switch (board[y][x].name){
+                        case "bB": res = R.drawable.bb; break;
+                        case "bK": res = R.drawable.bk; break;
+                        case "bN": res = R.drawable.bn; break;
+                        case "bQ": res = R.drawable.bq; break;
+                        case "bR": res = R.drawable.br; break;
+                        case "bp": res = R.drawable.bp; break;
+                        case "wB": res = R.drawable.wb; break;
+                        case "wK": res = R.drawable.wk; break;
+                        case "wN": res = R.drawable.wn; break;
+                        case "wR": res = R.drawable.wr; break;
+                        case "wQ": res = R.drawable.wq; break;
+                        case "wp": res = R.drawable.wp; break;
+                    }
+                    temp.setImageResource(res);
+                    temp.setTag(res);
+
                 }else{
-                    temp.setText("  ");
+                    temp.setImageResource(R.drawable.empty);
                 }
-                temp.setGravity(Gravity.CENTER);
 
                 boardGrid.addView(temp, i);
                 boardGrid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
@@ -101,19 +114,6 @@ public class GameScreen extends AppCompatActivity {
                         Log.d("index", Integer.toString(boardGrid.indexOfChild(view)));
 
                         if( gameEnded == true || ( requirePromote && promoteC == '/') ){
-                            return;
-                        }
-
-                        drawB.setText("Draw");
-                        if (drawProposed == true){
-                            turn = !turn;
-                            if(turn == true){
-                                displayText.setText("White's Turn.");
-                            }
-                            else{
-                                displayText.setText("Black's Turn.");
-                            }
-                            drawProposed = false;
                             return;
                         }
 
@@ -142,34 +142,66 @@ public class GameScreen extends AppCompatActivity {
 
 
     private void move() {
+
+        drawB.setText("Draw");
+        if (drawProposed == true){
+            turn = !turn;
+            if(turn == true){
+                displayText.setText("White's Turn.");
+            }
+            else{
+                displayText.setText("Black's Turn.");
+            }
+            drawProposed = false;
+            return;
+        }
+
         int[] moveStart = convert(start);
         int[] moveEnd = convert(end);
         if (!requirePromote && b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])) {
             setPBVisible();
             requirePromote = true;
-            TextView tempStart = (TextView) boardGrid.getChildAt(start);
-            TextView tempEnd = (TextView) boardGrid.getChildAt(end);
-            tempEnd.setText(tempStart.getText());
-            tempStart.setText("  ");
+            ImageView tempStart = (ImageView) boardGrid.getChildAt(start);
+            ImageView tempEnd = (ImageView) boardGrid.getChildAt(end);
+            tempEnd.setImageResource((Integer)tempStart.getTag());
+            tempStart.setImageResource(R.drawable.empty);
             displayText.setText(displayText.getText()+" Promote!");
             return;
         }
         if (b.valid(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, turn)) {
 
             //check if move puts other king in check
-            //if yes, check if checkmate
+            boolean check = b.check(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, !turn);
 
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             displayBoard(b.board);
             replay.addMove(start, end);
+            start = -1;
+            //display check/checkmate/or regular message
+            if( b.checkmate(!turn)&& !check ){
+                gameEnded = true;
+                displayText.setText("Stalemate! Draw.");
+                return;
+            }
+            if( check && b.checkmate(!turn) ){
+                gameEnded = true;
+                if( turn ) {
+                    displayText.setText("Checkmate! White wins.");
+                }else{
+                    displayText.setText("Checkmate! Black wins.");
+                }
+                return;
+            }
             turn = !turn;
             if( turn ){
                 displayText.setText("White's turn.");
             }else{
                 displayText.setText("Black's turn.");
             }
-            start = -1;
-            //display check/checkmate/or regular message
+            if( check ){
+                displayText.setText("Check! "+displayText.getText());
+            }
+
         }
     }
 
@@ -199,11 +231,12 @@ public class GameScreen extends AppCompatActivity {
 
                         break;
                     case R.id.drawB:
-                        turn = !turn;
+                        //turn = !turn;
                         if(drawProposed == true){
                             displayText.setText("Draw. Game Over.");
                             //end the game.
                         }
+
                         if(turn == true) {
                             displayText.setText("Draw Proposed. White's Turn. Touch anywhere on the board to decline.");
                             drawB.setText("Draw?");
@@ -219,10 +252,7 @@ public class GameScreen extends AppCompatActivity {
                         displayText.setText("resign button clicked");
 
                         break;
-                    default:
-                        break;
                 }
-
             }
         };
         undoB.setOnClickListener(buttonListener);
