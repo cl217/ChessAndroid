@@ -7,12 +7,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
  * Have to make an object to be serialized
  */
 public class Replay implements Serializable {
+    String title;
+    LocalDate date;
+
     ArrayList<Board> replay = new ArrayList<>();
 
     public void add( Board b ){

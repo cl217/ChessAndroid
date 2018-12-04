@@ -1,7 +1,11 @@
 package com.example.cindy.chess;
 
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 
 
@@ -56,6 +61,7 @@ public class GameScreen extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_screen);
         undoB = findViewById(R.id.undoB);
@@ -275,7 +281,9 @@ public class GameScreen extends AppCompatActivity {
         View.OnClickListener endBListener = new View.OnClickListener(){
             public void onClick (View view){
                 if( view.getId() == R.id.saveB ){
-
+                    String title = "temporary";
+                    replay.title = title;
+                    writeData( title );
                 }
                 if( view.getId() == R.id.newGameB ) {
                     Intent intent = new Intent(GameScreen.this, GameScreen.class);
@@ -364,9 +372,23 @@ public class GameScreen extends AppCompatActivity {
     }
 
 
-    public static void writeData(){
+    public void writeData( String replayName ){
+
+        Context context = this;
+        File path = context.getFilesDir();
+
+        /*
+        File[] list = path.listFiles();
+        for( int i = 0; i < list.length; i++ ) {
+            Log.d("path", list[i].getName());
+        }
+        */
+
+
+        File file = new File( path, replayName );
+
         try {
-            ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream("data" + File.separator + "replays") );
+            ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream(file));
             oos.writeObject(replay);
             oos.close();
         } catch (FileNotFoundException e) {
@@ -376,5 +398,6 @@ public class GameScreen extends AppCompatActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
     }
 }

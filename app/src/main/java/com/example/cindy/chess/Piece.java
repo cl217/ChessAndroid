@@ -1,11 +1,13 @@
 package com.example.cindy.chess;
 
+import java.io.Serializable;
+
 /**
  * @author Cindy Lin
  * @author Vincent Phan
  */
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
 	
 	/**
 	 * K (king), Q (queen), N (knight), R (rook), B (bishop), P (pawn)
