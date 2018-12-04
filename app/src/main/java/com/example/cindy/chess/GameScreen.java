@@ -75,6 +75,7 @@ public class GameScreen extends AppCompatActivity {
         displayText = findViewById(R.id.displayText);
 
         b.initialize();
+        initializeBoard();
         displayBoard(b.board);
         initializeButtons(); //moved all initialize button stuff to this
         replay = new Replay();
@@ -83,38 +84,12 @@ public class GameScreen extends AppCompatActivity {
 
     }
 
-
-    private void displayBoard( Piece[][] board ){
-        boardGrid.removeAllViews();
+    private void initializeBoard(){
         int i = 0;
-        for( int y = 0; y < 8; y++ ) {
-            for (int x = 0; x < 8; x++) {
+        for( int y = 0; y<8; y++ ){
+            for (int x=0; x<8; x++ ) {
                 ImageView temp = new ImageView(this);
                 temp.setLayoutParams(new LinearLayout.LayoutParams(73, 73));
-
-                if (board[y][x] != null){
-                    Integer res = 0;
-                    switch (board[y][x].name){
-                        case "bB": res = R.drawable.bb; break;
-                        case "bK": res = R.drawable.bk; break;
-                        case "bN": res = R.drawable.bn; break;
-                        case "bQ": res = R.drawable.bq; break;
-                        case "bR": res = R.drawable.br; break;
-                        case "bp": res = R.drawable.bp; break;
-                        case "wB": res = R.drawable.wb; break;
-                        case "wK": res = R.drawable.wk; break;
-                        case "wN": res = R.drawable.wn; break;
-                        case "wR": res = R.drawable.wr; break;
-                        case "wQ": res = R.drawable.wq; break;
-                        case "wp": res = R.drawable.wp; break;
-                    }
-                    temp.setImageResource(res);
-                    temp.setTag(res);
-
-                }else{
-                    temp.setImageResource(R.drawable.empty);
-                }
-
                 boardGrid.addView(temp, i);
                 boardGrid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -145,6 +120,37 @@ public class GameScreen extends AppCompatActivity {
                         }
                     }
                 });
+                i++;
+            }
+        }
+    }
+
+    private void displayBoard( Piece[][] board ){
+        int i = 0;
+        for( int y = 0; y < 8; y++ ) {
+            for (int x = 0; x < 8; x++) {
+                ImageView temp = (ImageView) boardGrid.getChildAt(i);
+                if (board[y][x] != null){
+                    Integer res = 0;
+                    switch (board[y][x].name){
+                        case "bB": res = R.drawable.bb; break;
+                        case "bK": res = R.drawable.bk; break;
+                        case "bN": res = R.drawable.bn; break;
+                        case "bQ": res = R.drawable.bq; break;
+                        case "bR": res = R.drawable.br; break;
+                        case "bp": res = R.drawable.bp; break;
+                        case "wB": res = R.drawable.wb; break;
+                        case "wK": res = R.drawable.wk; break;
+                        case "wN": res = R.drawable.wn; break;
+                        case "wR": res = R.drawable.wr; break;
+                        case "wQ": res = R.drawable.wq; break;
+                        case "wp": res = R.drawable.wp; break;
+                    }
+                    temp.setImageResource(res);
+                    temp.setTag(res);
+                }else{
+                    temp.setImageResource(R.drawable.empty);
+                }
                 i++;
             }
         }
