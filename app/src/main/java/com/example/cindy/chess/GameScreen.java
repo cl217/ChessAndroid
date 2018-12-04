@@ -167,9 +167,11 @@ public class GameScreen extends AppCompatActivity {
 
         if(drawProposed == true && initiator == turn){
             drawB.setText("Accept");
+            drawB.setBackgroundColor(Color.YELLOW);
         }
         else{
             drawB.setText("Draw");
+            drawB.setBackgroundColor(Color.TRANSPARENT);
             drawProposed =false;
         }
 
@@ -300,8 +302,10 @@ public class GameScreen extends AppCompatActivity {
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
-
-                        displayText.setText("undo button clicked");
+                        Board r = replay.get(replay.length()-1);
+                        b.board = r.board;
+                        displayBoard(b.board);
+                        //displayText.setText("undo button clicked");
 
                         break;
                     case R.id.drawB:
@@ -312,10 +316,15 @@ public class GameScreen extends AppCompatActivity {
                             return;
                             //end the game.
                         }
-                        if( !drawProposed ) {
+                        else if (drawProposed == true && turn == initiator ){
+                            drawProposed = false;
+                            drawB.setBackgroundColor(Color.TRANSPARENT);
+                        }
+                        else{ //if !drawProposed
                             initiator = turn;
                             drawProposed = true;
                             displayText.setText(displayText.getText() + "\nMake move and propose draw.");
+                            drawB.setBackgroundColor(Color.YELLOW);
                         }
                         break;
                     case R.id.resignB:

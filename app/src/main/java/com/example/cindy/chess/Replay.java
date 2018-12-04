@@ -23,6 +23,14 @@ public class Replay implements Serializable {
         replay.add(b);
     }
 
+    public Board get( int i ){
+        return replay.get(i);
+    }
+
+    public int length(){
+        return replay.size();
+    }
+
     private static final String directory = "data";
     private static final String file = "replays";
 
