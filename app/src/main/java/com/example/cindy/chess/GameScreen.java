@@ -42,6 +42,7 @@ public class GameScreen extends AppCompatActivity {
     private char promoteC;
     private boolean requirePromote;
     private boolean drawProposed = false;
+    private boolean initiator = false;
 
     private Board b = new Board();
 
@@ -149,17 +150,12 @@ public class GameScreen extends AppCompatActivity {
 
     private void move() {
 
-        drawB.setText("Draw");
-        if (drawProposed == true){
-            turn = !turn;
-            if(turn == true){
-                displayText.setText("White's Turn.");
-            }
-            else{
-                displayText.setText("Black's Turn.");
-            }
-            drawProposed = false;
-            return;
+        if(drawProposed == true && initiator == turn){
+            drawB.setText("Draw?");
+        }
+        else{
+            drawB.setText("Draw");
+            drawProposed =false;
         }
 
         int[] moveStart = convert(start);
@@ -208,6 +204,9 @@ public class GameScreen extends AppCompatActivity {
             }
             if( check ){
                 displayText.setText("Check! "+displayText.getText());
+            }
+            if(drawProposed == true){
+                displayText.setText("Draw Proposed! "+displayText.getText());
             }
 
         }
@@ -266,26 +265,20 @@ public class GameScreen extends AppCompatActivity {
 
                         break;
                     case R.id.drawB:
-                        //turn = !turn;
                         if(drawProposed == true){
                             displayText.setText("Draw. Game Over.");
                             //end the game.
                         }
-
-                        if(turn == true) {
-                            displayText.setText("Draw Proposed. White's Turn. Touch anywhere on the board to decline.");
-                            drawB.setText("Draw?");
-                        }
-                        else{
-                            displayText.setText("Draw Proposed. Black's Turn. Touch anywhere on the board to decline.");
-                            drawB.setText("Draw?");
-                        }
+                        initiator = turn;
                         drawProposed = true;
                         break;
                     case R.id.resignB:
-
-                        displayText.setText("resign button clicked");
-
+                        if( turn ){
+                            displayText.setText("Black Win!");
+                        }else {
+                            displayText.setText("White Win!");
+                        }
+                        //end the game.
                         break;
                 }
             }
