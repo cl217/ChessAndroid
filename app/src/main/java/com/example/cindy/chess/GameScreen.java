@@ -79,6 +79,7 @@ public class GameScreen extends AppCompatActivity {
         initializeButtons(); //moved all initialize button stuff to this
         replay = new Replay();
         displayText.setText("White's Turn.");
+        //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
 
     }
 
@@ -208,7 +209,7 @@ public class GameScreen extends AppCompatActivity {
                 displayText.setText("Check! "+displayText.getText());
             }
             if(drawProposed == true){
-                displayText.setText(displayText.getText() + " A Draw is Proposed. Accept? ");
+                displayText.setText(displayText.getText() + " A Draw is Proposed.\nAccept or Make Move.");
             }
 
         }
@@ -300,7 +301,7 @@ public class GameScreen extends AppCompatActivity {
                         if( !drawProposed ) {
                             initiator = turn;
                             drawProposed = true;
-                            displayText.setText(displayText.getText() + " Make move and propose draw.");
+                            displayText.setText(displayText.getText() + "\nMake move and propose draw.");
                         }
                         break;
                     case R.id.resignB:
