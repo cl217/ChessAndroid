@@ -153,7 +153,7 @@ public class GameScreen extends AppCompatActivity {
     private void move( int[] moveStart, int[] moveEnd ) {
 
         if(drawProposed == true && initiator == turn){
-            drawB.setText("Draw?");
+            drawB.setText("Accept");
         }
         else{
             drawB.setText("Draw");
@@ -208,7 +208,7 @@ public class GameScreen extends AppCompatActivity {
                 displayText.setText("Check! "+displayText.getText());
             }
             if(drawProposed == true){
-                displayText.setText("Draw Proposed! "+displayText.getText());
+                displayText.setText(displayText.getText() + " A Draw is Proposed. Accept? ");
             }
 
         }
@@ -290,12 +290,18 @@ public class GameScreen extends AppCompatActivity {
 
                         break;
                     case R.id.drawB:
-                        if(drawProposed == true){
+                        if(drawProposed == true && turn != initiator ){
                             displayText.setText("Draw. Game Over.");
+                            gameEnded = true;
+                            endGame();
+                            return;
                             //end the game.
                         }
-                        initiator = turn;
-                        drawProposed = true;
+                        if( !drawProposed ) {
+                            initiator = turn;
+                            drawProposed = true;
+                            displayText.setText(displayText.getText() + " Make move and propose draw.");
+                        }
                         break;
                     case R.id.resignB:
                         if( turn ){
