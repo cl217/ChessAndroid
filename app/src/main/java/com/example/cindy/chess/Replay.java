@@ -63,6 +63,8 @@ public class Replay implements Serializable {
                 if( b[i][k] == null ){
                     continue;
                 }
+                save[i][k] = b[i][k];
+                /*
                 Piece p = b[i][k];
                 Piece copy;
                 boolean color = p.color;
@@ -78,11 +80,19 @@ public class Replay implements Serializable {
                 }
                 copy.moveYet = p.moveYet;
                 save[i][k] = copy;
+                */
+
             }
         }
+
+        System.out.println("~~~~~BEFORE ADD~~~~~~~~~");
+        for( int i = 0; i<replay.size(); i++ ){
+            print( replay.get(i) );
+        }
+
         replay.add(save);
 
-        System.out.println("IN REPLAY");
+        System.out.println("~~~~AFTER ADD~~~~~~~~~~~");
 
         for( int i = 0; i<replay.size(); i++ ){
             print( replay.get(i) );
@@ -94,7 +104,17 @@ public class Replay implements Serializable {
     public Piece[][] undo(){
         System.out.println("REPLAY.UNDO");
         replay.remove(replay.size()-1);
-        return replay.get(replay.size()-1);
+        Piece[][] b = replay.get(replay.size()-1);
+        Piece[][] returnThis = new Piece[8][8];
+        for( int i = 0; i < 8; i++ ){
+            for( int k = 0; k < 8; k++ ){
+                if( b[i][k] == null ){
+                    continue;
+                }
+                returnThis[i][k] = b[i][k];
+            }
+        }
+        return returnThis;
     }
 
     public int length(){
