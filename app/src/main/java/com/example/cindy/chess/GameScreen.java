@@ -1,17 +1,22 @@
 package com.example.cindy.chess;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.GridLayout;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,6 +54,9 @@ public class GameScreen extends AppCompatActivity {
     private boolean drawProposed = false;
     private boolean initiator = false;
     private boolean undoProposed = false;
+    private String winText;
+
+    Saved data = HomeScreen.data;
 
     private Board b = new Board();
 
@@ -88,10 +96,17 @@ public class GameScreen extends AppCompatActivity {
         replay = new Replay();
         displayText.setText("White's Turn.");
 
-
         replay.add(b);
         //replay.print(b.board);
         //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
+
+        System.out.println("GameScreen.....");
+        /*
+        File[] list = HomeScreen.path.listFiles();
+        for( int i = 0; i < list.length; i++ ) {
+            System.out.println("file: " + list[i].getName());
+        }
+        */
 
     }
 
@@ -213,17 +228,14 @@ public class GameScreen extends AppCompatActivity {
             Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
             if( b.checkmate(!turn)&& !check ){
                 //gameEnded = true;
-                displayText.setText("Stalemate! Draw.");
+                //displayText.setText("Stalemate! Draw.");
+                winText = "Stalemate! Draw.";
                 endGame();
                 return;
             }
             if( check && b.checkmate(!turn) ){
                // gameEnded = true;
-                if( turn ) {
-                    displayText.setText("Checkmate! White wins.");
-                }else{
-                    displayText.setText("Checkmate! Black wins.");
-                }
+                winText = (turn)? "Checkmate! White wins" : "Checkmate! Black wins.";
                 endGame();
                 return;
             }
@@ -252,6 +264,7 @@ public class GameScreen extends AppCompatActivity {
         resignB.setVisibility(View.INVISIBLE);
         saveB.setVisibility(View.VISIBLE);
         newGameB.setVisibility(View.VISIBLE);
+        displayText.setText(winText);
     }
 
     private void promoteReset(){
@@ -302,10 +315,13 @@ public class GameScreen extends AppCompatActivity {
 
         View.OnClickListener endBListener = new View.OnClickListener(){
             public void onClick (View view){
+
                 if( view.getId() == R.id.saveB ){
-                    String title = "temporary";
-                    replay.title = title;
-                    writeData( title );
+                    if(displayText.getText().toString().contains("saved.")){
+                        displayText.setText(winText+"\nError: Replay already saved.");
+                        return;
+                    }
+                    textPopup();
                 }
                 if( view.getId() == R.id.newGameB ) {
                     Intent intent = new Intent(GameScreen.this, GameScreen.class);
@@ -345,7 +361,7 @@ public class GameScreen extends AppCompatActivity {
                         return;
                     case R.id.drawB:
                         if(drawProposed == true && turn != initiator ){
-                            displayText.setText("Draw. Game Over.");
+                            winText = "Draw. Game Over.";
                            // gameEnded = true;
                             endGame();
                             return;
@@ -364,11 +380,7 @@ public class GameScreen extends AppCompatActivity {
                         }
                         return;
                     case R.id.resignB:
-                        if( turn ){
-                            displayText.setText("Black Win!");
-                        }else {
-                            displayText.setText("White Win!");
-                        }
+                        winText = (turn) ? "White resigned.\nBlack wins." : "Black resigned.\nWhite wins.";
                         gameEnded = true;
                         endGame();
                         return;
@@ -418,31 +430,57 @@ public class GameScreen extends AppCompatActivity {
     }
 
 
-    public void writeData( String replayName ){
 
-        Context context = this;
-        File path = context.getFilesDir();
 
-        /*
-        File[] list = path.listFiles();
-        for( int i = 0; i < list.length; i++ ) {
-            Log.d("path", list[i].getName());
-        }
-        */
+    private void textPopup(){
 
-        File file = new File( path, replayName );
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
 
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream( new FileOutputStream(file));
-            oos.writeObject(replay);
-            oos.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String title = input.getText().toString();
+                while(title.charAt(0)==' ' && title.length() != 1 ) {
+                    title = title.substring(1, title.length());
+                }
+                while(title.charAt(title.length()-1)==' ' && title.length() != 1 ) {
+                    title = title.substring(0, title.length()-1);
+                }
+                for( int i = 0; i < title.length()-1; i++ ) {
+                    if( title.charAt(i) == ' ' && title.length() != 1 && title.charAt(i+1) == ' ' ) {
+                        title = title.substring(0, i) + title.substring(i+2, title.length());
+                    }
+                }
+                if(title.equals("")){
+                    return;
+                }
+                for( Replay r : data.allReplays ){
+                    if (r.title.equalsIgnoreCase(title)) {
+                        displayText.setText(winText+ "\nError: Existing replay name.");
+                        return;
+                    }
+                }
+                replay.title = title;
+                data.add(replay);
+                System.out.println("REPLAY ADDED");
+                for( int i = 0; i < data.allReplays.size(); i++ ){
+                    System.out.print(i+": ");
+                    System.out.println(data.allReplays.get(i).title);
+                }
+                data.writeData(HomeScreen.context);
+                displayText.setText(winText + "\nReplay saved.");
+            }
+        });
+        builder.show();
     }
 }

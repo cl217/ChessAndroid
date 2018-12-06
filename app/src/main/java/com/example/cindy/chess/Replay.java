@@ -1,6 +1,7 @@
 package com.example.cindy.chess;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
  * Have to make an object to be serialized
  */
 public class Replay implements Serializable {
-    String title;
-    LocalDate date;
+    public String title;
+    public LocalDate date;
 
     ArrayList<Board> replay = new ArrayList<>();
 
@@ -103,4 +104,14 @@ public class Replay implements Serializable {
     public int length(){
         return replay.size();
     }
+
+    /*
+    public Replay read(Context context, String name) throws IOException, ClassNotFoundException {
+        File path = context.getFilesDir();
+        ObjectInputStream ois = new ObjectInputStream( new FileInputStream(path + File.separator + name));
+        Replay replay = (Replay) ois.readObject();
+        ois.close();
+        return replay;
+    }
+    */
 }
