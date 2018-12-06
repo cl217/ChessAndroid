@@ -187,7 +187,10 @@ public class GameScreen extends AppCompatActivity {
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
             displayBoard(b.board);
-            replay.add(b);
+            //added replay board instance
+            Piece[][] tempB = b.board.clone();
+            Board cloneB = new Board(tempB);
+            replay.add(cloneB);
             start = -1;
             //display check/checkmate/or regular message
             Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
@@ -297,7 +300,8 @@ public class GameScreen extends AppCompatActivity {
                         Board r = replay.get(replay.length()-1);
                         b.board = r.board;
                         displayBoard(b.board);
-                        //displayText.setText("undo button clicked");
+                        turn = !turn;
+                        displayText.setText("undo button clicked");
 
                         break;
                     case R.id.drawB:
