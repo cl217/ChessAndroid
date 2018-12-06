@@ -48,6 +48,7 @@ public class GameScreen extends AppCompatActivity {
     private boolean requirePromote;
     private boolean drawProposed = false;
     private boolean initiator = false;
+    private boolean undoProposed = false;
 
     private Board b = new Board();
 
@@ -186,6 +187,8 @@ public class GameScreen extends AppCompatActivity {
             drawProposed =false;
         }
 
+        undoProposed = false;
+
         if (!requirePromote && b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])) {
             setPBVisible();
             requirePromote = true;
@@ -317,11 +320,24 @@ public class GameScreen extends AppCompatActivity {
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
-                        Log.d("undoB", "clicked");
+                        if(replay.length() == 1){
+                            displayText.setText("Error: Undo cannot be made on the first turn. White's Turn.");
+                            return;
+                        }
+                        if(undoProposed == true) {
+                            return;
+                        }
                         b = replay.undo();
                         displayBoard(b.board);
                         turn = !turn;
-                        displayText.setText("undo button clicked");
+                        undoProposed = true;
+                        drawB.setText("Draw");
+                        drawProposed =false;
+                        if( turn ) {
+                            displayText.setText("Undo made! White's Turn.\n Another Undo cannot be made");
+                        }else{
+                            displayText.setText("Undo made! Black's Turn.\n Another Undo cannot be made");
+                        }
                         return;
                     case R.id.drawB:
                         if(drawProposed == true && turn != initiator ){
@@ -350,6 +366,7 @@ public class GameScreen extends AppCompatActivity {
                             displayText.setText("White Win!");
                         }
                         gameEnded = true;
+                        endGame();
                         return;
                 }
             }
