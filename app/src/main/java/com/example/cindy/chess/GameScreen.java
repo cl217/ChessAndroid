@@ -161,19 +161,13 @@ public class GameScreen extends AppCompatActivity {
                     temp.setTag(res);
                 }else{
                     temp.setImageResource(R.drawable.empty);
+                    temp.setTag(R.drawable.empty);
                 }
                 i++;
             }
         }
     }
 
-    private void resetText(){
-        if(turn){
-            displayText.setText("White's turn.");
-        }else{
-            displayText.setText("Black's turn.");
-        }
-    }
     private void move( int[] moveStart, int[] moveEnd ) {
 
         if(drawProposed == true && initiator == turn){
@@ -216,13 +210,13 @@ public class GameScreen extends AppCompatActivity {
             //display check/checkmate/or regular message
             Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
             if( b.checkmate(!turn)&& !check ){
-                gameEnded = true;
+                //gameEnded = true;
                 displayText.setText("Stalemate! Draw.");
                 endGame();
                 return;
             }
             if( check && b.checkmate(!turn) ){
-                gameEnded = true;
+               // gameEnded = true;
                 if( turn ) {
                     displayText.setText("Checkmate! White wins.");
                 }else{
@@ -232,11 +226,8 @@ public class GameScreen extends AppCompatActivity {
                 return;
             }
             turn = !turn;
-            if( turn ){
-                displayText.setText("White's turn.");
-            }else{
-                displayText.setText("Black's turn.");
-            }
+            displayText.setText(getTurnText());
+
             if( check ){
                 displayText.setText("Check! "+displayText.getText());
             }
@@ -247,7 +238,12 @@ public class GameScreen extends AppCompatActivity {
         }
     }
 
+    private String getTurnText(){
+        return (turn==true)? "White's Turn.":"Black's Turn.";
+    }
+
     private void endGame(){
+        gameEnded = true;
         aiB.setVisibility(View.INVISIBLE);
         undoB.setVisibility(View.INVISIBLE);
         drawB.setVisibility(View.INVISIBLE);
@@ -286,6 +282,10 @@ public class GameScreen extends AppCompatActivity {
                                     if (b.valid(x, y, x2, y2, '/', turn)) {
                                         int[] moveStart = {x, y};
                                         int[] moveEnd = {x2, y2};
+                                        //PROMOTE
+                                        if( b.validPromote(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1])){
+                                               requirePromote = true;
+                                        }
                                         move(moveStart, moveEnd);
                                         return;
                                     }
@@ -333,22 +333,19 @@ public class GameScreen extends AppCompatActivity {
                         undoProposed = true;
                         drawB.setText("Draw");
                         drawProposed =false;
-                        if( turn ) {
-                            displayText.setText("Undo made! White's Turn.\n Another Undo cannot be made");
-                        }else{
-                            displayText.setText("Undo made! Black's Turn.\n Another Undo cannot be made");
-                        }
+                        displayText.setText("Undo made! Another Undo cannot be made. \n" + getTurnText());
+
                         return;
                     case R.id.drawB:
                         if(drawProposed == true && turn != initiator ){
                             displayText.setText("Draw. Game Over.");
-                            gameEnded = true;
+                           // gameEnded = true;
                             endGame();
                             return;
                             //end the game.
                         }
                         else if (drawProposed == true && turn == initiator ){
-                            resetText();
+                            displayText.setText(getTurnText());
                             drawProposed = false;
                             //drawB.setBackgroundColor(Color.LTGRAY);
                         }
@@ -425,7 +422,6 @@ public class GameScreen extends AppCompatActivity {
             Log.d("path", list[i].getName());
         }
         */
-
 
         File file = new File( path, replayName );
 

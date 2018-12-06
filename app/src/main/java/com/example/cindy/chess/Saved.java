@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 public class Saved {
-    ArrayList<Replay> allReplays = new ArrayList<>();
+    public static ArrayList<Replay> allReplays = new ArrayList<>();
 
     public void add( Replay replay){
         allReplays.add(replay);

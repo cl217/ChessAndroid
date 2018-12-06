@@ -4,7 +4,11 @@ Pawn Promote - DONE
 White/Black Turn Display - DONE
 Check Detect+Display - DONE
 Checkmate Detect+Display - DONE
-AI  - DONE
+
+AI
+   PROMOTE
+
+
 Draw - DONE
 
 Undo - Implement
