@@ -86,6 +86,7 @@ public class GameScreen extends AppCompatActivity {
         initializeButtons(); //moved all initialize button stuff to this
         replay = new Replay();
         displayText.setText("White's Turn.");
+        replay.add(b.board);
         //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
 
     }
@@ -162,16 +163,23 @@ public class GameScreen extends AppCompatActivity {
         }
     }
 
-
+    private void resetText(){
+        if(turn){
+            displayText.setText("White's turn.");
+        }else{
+            displayText.setText("Black's turn.");
+        }
+    }
     private void move( int[] moveStart, int[] moveEnd ) {
 
         if(drawProposed == true && initiator == turn){
             drawB.setText("Accept");
-            drawB.setBackgroundColor(Color.YELLOW);
+            drawB.setOutlineAmbientShadowColor(Color.YELLOW);
+            //drawB.setBackgroundColor(Color.YELLOW);
         }
         else{
             drawB.setText("Draw");
-            drawB.setBackgroundColor(Color.TRANSPARENT);
+            //drawB.setBackgroundColor(Color.LTGRAY);
             drawProposed =false;
         }
 
@@ -193,7 +201,7 @@ public class GameScreen extends AppCompatActivity {
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
             displayBoard(b.board);
-            replay.add(b);
+            replay.add(b.board);
             start = -1;
             //display check/checkmate/or regular message
             Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
@@ -302,8 +310,8 @@ public class GameScreen extends AppCompatActivity {
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
-                        Board r = replay.get(replay.length()-1);
-                        b.board = r.board;
+                        b.board = replay.undo();
+
                         displayBoard(b.board);
                         //displayText.setText("undo button clicked");
 
@@ -317,14 +325,15 @@ public class GameScreen extends AppCompatActivity {
                             //end the game.
                         }
                         else if (drawProposed == true && turn == initiator ){
+                            resetText();
                             drawProposed = false;
-                            drawB.setBackgroundColor(Color.TRANSPARENT);
+                            //drawB.setBackgroundColor(Color.LTGRAY);
                         }
                         else{ //if !drawProposed
                             initiator = turn;
                             drawProposed = true;
                             displayText.setText(displayText.getText() + "\nMake move and propose draw.");
-                            drawB.setBackgroundColor(Color.YELLOW);
+                            //drawB.setBackgroundColor(Color.YELLOW);
                         }
                         break;
                     case R.id.resignB:
