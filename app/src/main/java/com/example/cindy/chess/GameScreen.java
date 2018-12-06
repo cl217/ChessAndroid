@@ -464,18 +464,16 @@ public class GameScreen extends AppCompatActivity {
                 if(title.equals("")){
                     return;
                 }
-                for( Replay r : data.allReplays ){
-                    if (r.title.equalsIgnoreCase(title)) {
-                        displayText.setText(winText+ "\nError: Existing replay name.");
-                        return;
-                    }
+                if( data.allReplays.containsKey(title.toLowerCase()) ){
+                    displayText.setText(winText+ "\nError: Existing replay name.");
+                    return;
                 }
+
                 replay.title = title;
                 data.add(replay);
                 System.out.println("REPLAY ADDED");
-                for( int i = 0; i < data.allReplays.size(); i++ ){
-                    System.out.print(i+": ");
-                    System.out.println(data.allReplays.get(i).title);
+                for(String key : data.allReplays.keySet()){
+                    System.out.println(data.allReplays.get(key).title);
                 }
                 data.writeData(HomeScreen.context);
                 displayText.setText(winText + "\nReplay saved.");

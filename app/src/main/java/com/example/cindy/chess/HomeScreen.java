@@ -53,8 +53,8 @@ public class HomeScreen extends AppCompatActivity {
             System.out.println("file: " + list[i].getName());
         }
         */
-        for( int i = 0; i < data.allReplays.size(); i++ ){
-            System.out.println(data.allReplays.get(i).title);
+        for( String key : data.allReplays.keySet() ){
+            System.out.println(key);
         }
     }
 

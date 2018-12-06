@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <ListView
+        android:id="@+id/replayLV"
         android:layout_width="344dp"
         android:layout_height="386dp"
         android:layout_marginStart="8dp"
@@ -20,7 +21,7 @@
         app:layout_constraintVertical_bias="0.669" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/dropDown"
         android:layout_width="114dp"
         android:layout_height="34dp"
         android:layout_marginStart="256dp"
@@ -44,7 +45,7 @@
         android:text="Sort By:"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/_dynamic"
-        app:layout_constraintEnd_toStartOf="@+id/spinner"
+        app:layout_constraintEnd_toStartOf="@+id/dropDown"
         app:layout_constraintHorizontal_bias="0.983"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

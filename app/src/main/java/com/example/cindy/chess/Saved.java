@@ -11,31 +11,31 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Saved implements Serializable {
-    public ArrayList<Replay> allReplays = new ArrayList<>();
+    //public ArrayList<Replay> allReplays = new ArrayList<>();
+    public HashMap<String,Replay> allReplays = new HashMap<>();
 
     public void add( Replay replay){
-        allReplays.add(replay);
-        System.out.println("IN SAVED");
-        for(int i = 0; i < allReplays.size(); i++ ){
-            System.out.println(i+": ");
-            System.out.println(allReplays.get(i).title);
-        }
+        allReplays.put( replay.title.toLowerCase(),replay);
     }
     public void remove(Replay replay){
-        allReplays.remove(replay);
+        allReplays.remove(replay.title.toLowerCase());
     }
     public boolean isEmpty(){
         return allReplays.isEmpty();
     }
 
 
+    /*
     public Saved (){
         Replay replay = new Replay();
         replay.title = "ignore this"; //so serialization doesnt crash
-        allReplays.add(replay);
+        allReplays.put(replay);
     }
+    */
+
     public static Saved read(Context context) throws IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream(context.openFileInput("replaylist.txt"));
         Saved save = (Saved) ois.readObject();

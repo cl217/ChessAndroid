@@ -4,16 +4,15 @@ Bugs
     Cant castle after undoing king/rook's first move
 
 Save - Implement
-    Serialization
-    Offer to save - done
-    Set Title
-        -Popup?
-        -ErrorChecks (no duplicates)
     Set Date - Should be automatic
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sort by Title
-Sort by Date
+ReplaySelection
+    Sort by Title
+    Sort by Date
+    Delete?
+    Rename?
+
 Replay
 
 
