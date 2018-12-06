@@ -190,7 +190,7 @@ public class GameScreen extends AppCompatActivity {
             ImageView tempEnd = (ImageView) boardGrid.getChildAt(end);
             tempEnd.setImageResource((Integer)tempStart.getTag());
             tempStart.setImageResource(R.drawable.empty);
-            displayText.setText(displayText.getText()+" Promote!");
+            displayText.setText(getTurnText()+"\nPromote!");
             return;
         }
         if (b.valid(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, turn)) {
@@ -200,6 +200,8 @@ public class GameScreen extends AppCompatActivity {
             Log.d("check", Boolean.toString(check));
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
+            b.prevX1 = moveStart[0]; b.prevY1 = moveStart[1]; b.prevX2 = moveEnd[0]; b.prevY2 = moveEnd[1];
+            b.prevType = b.getType(moveEnd[0], moveEnd[1]);
             displayBoard(b.board);
 
             //added replay board instance
@@ -229,10 +231,10 @@ public class GameScreen extends AppCompatActivity {
             displayText.setText(getTurnText());
 
             if( check ){
-                displayText.setText("Check! "+displayText.getText());
+                displayText.setText("Check! "+ getTurnText());
             }
             if(drawProposed == true){
-                displayText.setText(displayText.getText() + " A Draw is Proposed.\nAccept or Make Move.");
+                displayText.setText(getTurnText() + "\nA Draw is Proposed. Accept or Make Move.");
             }
 
         }
@@ -321,19 +323,24 @@ public class GameScreen extends AppCompatActivity {
                 switch (view.getId()) {
                     case R.id.undoB:
                         if(replay.length() == 1){
-                            displayText.setText("Error: Undo cannot be made on the first turn. White's Turn.");
+                            displayText.setText("No move to undo.\n"+ "White's Turn.");
                             return;
                         }
                         if(undoProposed == true) {
+                            displayText.setText("Cannot undo more moves\n" + getTurnText());
                             return;
                         }
                         b = replay.undo();
                         displayBoard(b.board);
+                        if( start != -1 ) {
+                            boardGrid.getChildAt(start).setBackgroundColor(Color.TRANSPARENT);
+                            start = -1;
+                        }
                         turn = !turn;
                         undoProposed = true;
                         drawB.setText("Draw");
                         drawProposed =false;
-                        displayText.setText("Undo made! Another Undo cannot be made. \n" + getTurnText());
+                        displayText.setText("Undo made!\n" + getTurnText());
 
                         return;
                     case R.id.drawB:
@@ -352,7 +359,7 @@ public class GameScreen extends AppCompatActivity {
                         else{ //if !drawProposed
                             initiator = turn;
                             drawProposed = true;
-                            displayText.setText(displayText.getText() + "\nMake move and propose draw.");
+                            displayText.setText(getTurnText() + "\nMake move and propose draw.");
                             //drawB.setBackgroundColor(Color.YELLOW);
                         }
                         return;

@@ -1,23 +1,7 @@
 
-Board Display - DONE
-Pawn Promote - DONE
-White/Black Turn Display - DONE
-Check Detect+Display - DONE
-Checkmate Detect+Display - DONE
 
-AI
-   PROMOTE
-
-
-Draw - DONE
-
-Undo - Implement
-    -Can only undo the last move
-    -Revert both boardGrid, board.b
-    -Revert turn. (If it's black's move, and undo is pressed, undo last move (white's move) and go back to white's turn)
-    -Delete last move from replay arraylist
-
-Resign - Implement
+Bugs
+    Cant castle after undoing king/rook's first move
 
 Save - Implement
     Serialization
