@@ -40,6 +40,5 @@ public abstract class Piece implements Serializable {
 	 * @return true if move is valid
 	 */
 	abstract boolean validMove(int x1,int y1,int x2,int y2);
-	
 }
 

@@ -86,7 +86,10 @@ public class GameScreen extends AppCompatActivity {
         initializeButtons(); //moved all initialize button stuff to this
         replay = new Replay();
         displayText.setText("White's Turn.");
+
+
         replay.add(b.board);
+        //replay.print(b.board);
         //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
 
     }
@@ -201,7 +204,11 @@ public class GameScreen extends AppCompatActivity {
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
             displayBoard(b.board);
+
+            //added replay board instance
             replay.add(b.board);
+            //replay.print(b.board);
+
             start = -1;
             //display check/checkmate/or regular message
             Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
@@ -310,12 +317,12 @@ public class GameScreen extends AppCompatActivity {
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
+                        Log.d("undoB", "clicked");
                         b.board = replay.undo();
-
                         displayBoard(b.board);
-                        //displayText.setText("undo button clicked");
-
-                        break;
+                        turn = !turn;
+                        displayText.setText("undo button clicked");
+                        return;
                     case R.id.drawB:
                         if(drawProposed == true && turn != initiator ){
                             displayText.setText("Draw. Game Over.");
@@ -335,15 +342,15 @@ public class GameScreen extends AppCompatActivity {
                             displayText.setText(displayText.getText() + "\nMake move and propose draw.");
                             //drawB.setBackgroundColor(Color.YELLOW);
                         }
-                        break;
+                        return;
                     case R.id.resignB:
                         if( turn ){
                             displayText.setText("Black Win!");
                         }else {
                             displayText.setText("White Win!");
                         }
-                        //end the game.
-                        break;
+                        gameEnded = true;
+                        return;
                 }
             }
         };
