@@ -65,6 +65,7 @@ public class Replay implements Serializable {
                     continue;
                 }
                 save[i][k] = b.board[i][k];
+                //save[i][k].moveYet = b.board[i][k].moveYet; doesn't fix castling
             }
         }
         addThis.board = save;
