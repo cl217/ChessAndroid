@@ -19,7 +19,7 @@ public class Replay implements Serializable {
     String title;
     LocalDate date;
 
-    ArrayList<Piece[][]> replay = new ArrayList<>();
+    ArrayList<Board> replay = new ArrayList<>();
 
     public void print( Piece[][] board ) {
         int colDis = 8;
@@ -55,65 +55,47 @@ public class Replay implements Serializable {
         //System.out.println(" 0  1  2  3  4  5  6  7 ");
     }
 
-    public void add( Piece[][] b ){
+    public void add( Board b ){
 
+        Board addThis = new Board();
         Piece[][] save = new Piece[8][8];
         for( int i = 0; i < 8; i++ ){
-            for( int k = 0; k < 8; k++ ){
-                if( b[i][k] == null ){
+            for( int k = 0; k < 8; k++ ) {
+                if (b.board[i][k] == null) {
                     continue;
                 }
-                save[i][k] = b[i][k];
-                /*
-                Piece p = b[i][k];
-                Piece copy;
-                boolean color = p.color;
-                String c =(color == true)? "w": "b";
-                char type = p.type;
-                switch ( type ){
-                    case 'N': copy = new Knight(color, c+"N"); break;
-                    case 'Q': copy = new Queen(color, c+"Q"); break;
-                    case 'K': copy = new King( color, c+"K"); break;
-                    case 'R': copy = new Rook( color, c+"R"); break;
-                    case 'B': copy = new Bishop(color, c+"B"); break;
-                    default: copy = new Pawn(color, c+"p"); break;
-                }
-                copy.moveYet = p.moveYet;
-                save[i][k] = copy;
-                */
-
+                save[i][k] = b.board[i][k];
             }
         }
-
-        System.out.println("~~~~~BEFORE ADD~~~~~~~~~");
-        for( int i = 0; i<replay.size(); i++ ){
-            print( replay.get(i) );
-        }
-
-        replay.add(save);
-
-        System.out.println("~~~~AFTER ADD~~~~~~~~~~~");
-
-        for( int i = 0; i<replay.size(); i++ ){
-            print( replay.get(i) );
-        }
-
+        addThis.board = save;
+        addThis.prevType = b.prevType;
+        addThis.prevX1 = b.prevX1;
+        addThis.prevX2 = b.prevX2;
+        addThis.prevY1 = b.prevY1;
+        addThis.prevY2 = b.prevY2;
+        replay.add(addThis);
 
     }
 
-    public Piece[][] undo(){
+    public Board undo(){
         System.out.println("REPLAY.UNDO");
         replay.remove(replay.size()-1);
-        Piece[][] b = replay.get(replay.size()-1);
-        Piece[][] returnThis = new Piece[8][8];
+        Board b = replay.get(replay.size()-1);
+        Board returnThis = new Board();
         for( int i = 0; i < 8; i++ ){
             for( int k = 0; k < 8; k++ ){
-                if( b[i][k] == null ){
+                if( b.board[i][k] == null ){
                     continue;
                 }
-                returnThis[i][k] = b[i][k];
+                returnThis.board[i][k] = b.board[i][k];
             }
         }
+        returnThis.prevType = b.prevType;
+        returnThis.prevX1 = b.prevX1;
+        returnThis.prevX2 = b.prevX2;
+        returnThis.prevY1 = b.prevY1;
+        returnThis.prevY2 = b.prevY2;
+
         return returnThis;
     }
 

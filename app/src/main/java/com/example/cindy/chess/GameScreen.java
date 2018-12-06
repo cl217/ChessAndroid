@@ -56,7 +56,7 @@ public class GameScreen extends AppCompatActivity {
       undoing promotions might take too much work otherwise
      */
     //to be saved for replay?
-    public static Replay replay;
+    public static Replay replay = new Replay();
 
 
     @Override
@@ -88,7 +88,7 @@ public class GameScreen extends AppCompatActivity {
         displayText.setText("White's Turn.");
 
 
-        replay.add(b.board);
+        replay.add(b);
         //replay.print(b.board);
         //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
 
@@ -206,7 +206,7 @@ public class GameScreen extends AppCompatActivity {
             displayBoard(b.board);
 
             //added replay board instance
-            replay.add(b.board);
+            replay.add(b);
             //replay.print(b.board);
 
             start = -1;
@@ -318,7 +318,7 @@ public class GameScreen extends AppCompatActivity {
                 switch (view.getId()) {
                     case R.id.undoB:
                         Log.d("undoB", "clicked");
-                        b.board = replay.undo();
+                        b = replay.undo();
                         displayBoard(b.board);
                         turn = !turn;
                         displayText.setText("undo button clicked");
