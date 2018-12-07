@@ -575,4 +575,8 @@ public class Board implements Serializable {
     public char getType(int x2, int y2) {
         return board[y2][x2].type;
     }
+
+    public boolean getColor(int x2, int y2) {
+        return board[y2][x2].color;
+    }
 }

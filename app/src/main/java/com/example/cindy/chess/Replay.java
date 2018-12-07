@@ -81,6 +81,8 @@ public class Replay implements Serializable {
 
     public Board undo(){
         System.out.println("REPLAY.UNDO");
+        char prevT = replay.get(replay.size()-1).prevType;
+        boolean prevC = replay.get(replay.size()-1).getColor(replay.get(replay.size()-1).prevX2,replay.get(replay.size()-1).prevY2);
         replay.remove(replay.size()-1);
         Board b = replay.get(replay.size()-1);
         Board returnThis = new Board();
@@ -90,6 +92,9 @@ public class Replay implements Serializable {
                     continue;
                 }
                 returnThis.board[i][k] = b.board[i][k];
+                if(returnThis.board[i][k].type == prevT && returnThis.board[i][k].color == prevC){
+                    returnThis.board[i][k].moveYet = false;
+                }
             }
         }
         returnThis.prevType = b.prevType;
