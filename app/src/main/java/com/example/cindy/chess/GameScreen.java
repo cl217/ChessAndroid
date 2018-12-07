@@ -1,18 +1,13 @@
 package com.example.cindy.chess;
 
 import android.app.AlertDialog;
-import android.app.Application;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.GridLayout;
@@ -21,17 +16,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 
+/**
+ * @author Cindy Lin
+ * @author Vincent Phan
+ */
 public class GameScreen extends AppCompatActivity {
 
     private GridLayout boardGrid;
@@ -47,6 +39,7 @@ public class GameScreen extends AppCompatActivity {
     private Button bishopB;
     private Button newGameB;
     private Button saveB;
+    private Button homeB;
 
     private int start = -1;
     private int end = -1;
@@ -88,6 +81,7 @@ public class GameScreen extends AppCompatActivity {
 
         saveB = findViewById(R.id.saveB);
         newGameB = findViewById(R.id.newGameB);
+        homeB = findViewById(R.id.homeB);
 
         boardGrid = findViewById(R.id.boardGrid);
         displayText = findViewById(R.id.displayText);
@@ -115,8 +109,6 @@ public class GameScreen extends AppCompatActivity {
                 boardGrid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("index", Integer.toString(boardGrid.indexOfChild(view)));
-
                         if( gameEnded == true || ( requirePromote && promoteC == '/') ){
                             return;
                         }
@@ -207,7 +199,6 @@ public class GameScreen extends AppCompatActivity {
 
             //check if move puts other king in check
             boolean check = b.check(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC, !turn);
-            Log.d("check", Boolean.toString(check));
             b.move(moveStart[0], moveStart[1], moveEnd[0], moveEnd[1], promoteC);
             b.board[moveEnd[1]][moveEnd[0]].moveYet = true;
             b.prevX1 = moveStart[0]; b.prevY1 = moveStart[1]; b.prevX2 = moveEnd[0]; b.prevY2 = moveEnd[1];
@@ -220,7 +211,6 @@ public class GameScreen extends AppCompatActivity {
 
             start = -1;
             //display check/checkmate/or regular message
-            Log.d("checkmate", Boolean.toString(b.checkmate(!turn)));
             if( b.checkmate(!turn)&& !check ){
                 //gameEnded = true;
                 //displayText.setText("Stalemate! Draw.");
@@ -257,6 +247,7 @@ public class GameScreen extends AppCompatActivity {
         undoB.setVisibility(View.INVISIBLE);
         drawB.setVisibility(View.INVISIBLE);
         resignB.setVisibility(View.INVISIBLE);
+        homeB.setVisibility(View.VISIBLE);
         saveB.setVisibility(View.VISIBLE);
         newGameB.setVisibility(View.VISIBLE);
         displayText.setText(winText);
@@ -333,7 +324,7 @@ public class GameScreen extends AppCompatActivity {
             public void onClick (View view){
                 switch (view.getId()) {
                     case R.id.undoB:
-                        if(replay.length() == 1){
+                        if(replay.size() == 1){
                             displayText.setText("No move to undo.\n"+ "White's Turn.");
                             return;
                         }
@@ -375,7 +366,7 @@ public class GameScreen extends AppCompatActivity {
                         }
                         return;
                     case R.id.resignB:
-                        winText = (turn) ? "White resigned.\nBlack wins." : "Black resigned.\nWhite wins.";
+                        winText = (turn) ? "White resigned. Black wins." : "Black resigned. White wins.";
                         gameEnded = true;
                         endGame();
                         return;
@@ -405,6 +396,13 @@ public class GameScreen extends AppCompatActivity {
         rookB.setOnClickListener(promoteBListener);
         knightB.setOnClickListener(promoteBListener);
 
+        homeB.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(GameScreen.this, HomeScreen.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private static int[] convert( int gridIndex ) {
@@ -467,12 +465,10 @@ public class GameScreen extends AppCompatActivity {
                 replay.title = title;
                 Date date = Calendar.getInstance().getTime();
                 replay.date = date;
-                System.out.println("Date: "+ replay.getDate());
+                //System.out.println("Date: "+ replay.getDate());
+                replay.endgame = winText;
                 data.add(replay);
-                System.out.println("REPLAY ADDED");
-                for(String key : data.allReplays.keySet()){
-                    System.out.println(data.allReplays.get(key).title);
-                }
+                //System.out.println("REPLAY ADDED");
                 data.writeData(HomeScreen.context);
                 displayText.setText(winText + "\nReplay saved.");
             }

@@ -2,21 +2,13 @@ package com.example.cindy.chess;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class ReplaySelection extends AppCompatActivity {
     /*
@@ -26,6 +18,7 @@ public class ReplaySelection extends AppCompatActivity {
     Saved data = HomeScreen.data;
     public static String selectedKey;
 
+    private Button backB;
     private ListView replayLV;
     private ArrayList<String> replayList =  new ArrayList<String>();
     //private String[] replayList;
@@ -33,6 +26,15 @@ public class ReplaySelection extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.replay_select_screen);
+
+        backB = findViewById(R.id.backBS);
+        backB.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(ReplaySelection.this, HomeScreen.class);
+                startActivity(intent);
+            }
+        });
 
         replayLV = findViewById(R.id.replayLV);
 
@@ -68,6 +70,7 @@ public class ReplaySelection extends AppCompatActivity {
         Intent intent = new Intent(this, ReplayScreen.class);
         startActivity(intent);
     }
+
     private String getKey(String str){
         return str.substring(0, str.length()-22);
     }

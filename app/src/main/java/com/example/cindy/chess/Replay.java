@@ -1,26 +1,20 @@
 package com.example.cindy.chess;
 
 
-import android.content.Context;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Have to make an object to be serialized
+ * @author Cindy Lin
+ * @author Vincent Phan
  */
 public class Replay implements Serializable {
     public String title;
     public Date date;
+    public String endgame;
 
     ArrayList<Board> replay = new ArrayList<>();
 
@@ -41,7 +35,6 @@ public class Replay implements Serializable {
                     continue;
                 }
                 save[i][k] = b.board[i][k];
-                //save[i][k].moveYet = b.board[i][k].moveYet; doesn't fix castling
             }
         }
         addThis.board = save;
@@ -55,7 +48,6 @@ public class Replay implements Serializable {
     }
 
     public Board undo(){
-        System.out.println("REPLAY.UNDO");
         char prevT = replay.get(replay.size()-1).prevType;
         boolean prevC = replay.get(replay.size()-1).getColor(replay.get(replay.size()-1).prevX2,replay.get(replay.size()-1).prevY2);
         replay.remove(replay.size()-1);
@@ -81,17 +73,11 @@ public class Replay implements Serializable {
         return returnThis;
     }
 
-    public int length(){
+    public int size(){
         return replay.size();
     }
 
-    /*
-    public Replay read(Context context, String name) throws IOException, ClassNotFoundException {
-        File path = context.getFilesDir();
-        ObjectInputStream ois = new ObjectInputStream( new FileInputStream(path + File.separator + name));
-        Replay replay = (Replay) ois.readObject();
-        ois.close();
-        return replay;
+    public Piece[][] get(int i){
+        return replay.get(i).board;
     }
-    */
 }

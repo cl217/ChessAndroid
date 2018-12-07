@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import java.io.IOException;
 
+/**
+ * @author Cindy Lin
+ * @author Vincent Phan
+ */
 public class HomeScreen extends AppCompatActivity {
 
     private Button newGameB;
@@ -42,27 +46,17 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        System.out.println("Homescreen");
-        /*
-        System.out.println(path.toPath().toString());
-        File[] list = path.listFiles();
-        for( int i = 0; i < list.length; i++ ) {
-            System.out.println("file: " + list[i].getName());
-        }
-        */
-        for( String key : data.allReplays.keySet() ){
-            System.out.println(key);
-        }
     }
 
     private void loadData(){
         try {
             data = data.read(this);
         }catch (IOException e ){
-            System.out.println("Broken");
+            return;
+            //System.out.println("Broken");
         }catch (ClassNotFoundException e2){
-            System.out.println("Beyond Broken");
+            return;
+            //System.out.println("Beyond Broken");
         }
 
     }
