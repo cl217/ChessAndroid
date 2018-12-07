@@ -6,6 +6,8 @@ Bugs
 Save - Implement
     Set Date - Should be automatic
 
+Gameplay:
+    Make a homescreen button after game end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ReplaySelection
     Sort by Title
