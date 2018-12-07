@@ -1,15 +1,13 @@
 
 
-Bugs
-    Cant castle after undoing king/rook's first move
-
-Save - Implement
-    Set Date - Should be automatic
 
 Gameplay:
-    Make a homescreen button after game end
+    Make a homescreen button after game end/ back button
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ReplaySelection
+    Dropdown
+        -Default should be set to title
     Sort by Title
     Sort by Date
     Delete?

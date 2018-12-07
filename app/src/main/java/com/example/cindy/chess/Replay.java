@@ -10,50 +10,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Have to make an object to be serialized
  */
 public class Replay implements Serializable {
     public String title;
-    public LocalDate date;
+    public Date date;
 
     ArrayList<Board> replay = new ArrayList<>();
 
-    public void print( Piece[][] board ) {
-        int colDis = 8;
-        for( int i = 0; i < 8; i++ ) {
-            for( int k = 0; k < 8; k++ ) {
-                if( board[i][k] != null ) {
-                    System.out.print(board[i][k].name);
-                    System.out.print(" ");
-                }else {
-                    if( i % 2 == 0 ) {
-                        if( k % 2 == 0) {
-                            System.out.print("   ");
-                        }else {
-                            System.out.print("## ");
-                        }
 
-                    }else {
-                        if( k % 2 == 0) {
-                            System.out.print("## ");
-                        }else {
-                            System.out.print("   ");
-                        }
-                    }
-                }
-            }
-            System.out.println(colDis);
-            //System.out.println(" " + i);
-            colDis--;
-        }
-        System.out.println(" a  b  c  d  e  f  g  h");
-        System.out.println("                         ");
-        System.out.println("                         ");
-        //System.out.println(" 0  1  2  3  4  5  6  7 ");
+
+    public String getDate(){
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+        return format.format(date);
     }
 
     public void add( Board b ){

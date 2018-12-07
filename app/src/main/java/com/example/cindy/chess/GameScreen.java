@@ -27,6 +27,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class GameScreen extends AppCompatActivity {
@@ -99,14 +102,6 @@ public class GameScreen extends AppCompatActivity {
         replay.add(b);
         //replay.print(b.board);
         //displayText.setGravity(View.TEXT_ALIGNMENT_CENTER);
-
-        System.out.println("GameScreen.....");
-        /*
-        File[] list = HomeScreen.path.listFiles();
-        for( int i = 0; i < list.length; i++ ) {
-            System.out.println("file: " + list[i].getName());
-        }
-        */
 
     }
 
@@ -470,6 +465,9 @@ public class GameScreen extends AppCompatActivity {
                 }
 
                 replay.title = title;
+                Date date = Calendar.getInstance().getTime();
+                replay.date = date;
+                System.out.println("Date: "+ replay.getDate());
                 data.add(replay);
                 System.out.println("REPLAY ADDED");
                 for(String key : data.allReplays.keySet()){
