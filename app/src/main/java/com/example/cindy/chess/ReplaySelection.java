@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
-public class ReplaySelection extends AppCompatActivity {
+public class ReplaySelection extends AppCompatActivity implements Comparator {
     /*
         data.allReplays hashmap
         key is replay.title.toLowerCase
@@ -21,6 +24,7 @@ public class ReplaySelection extends AppCompatActivity {
     private Button backB;
     private ListView replayLV;
     private ArrayList<String> replayList =  new ArrayList<String>();
+    private ArrayList<Replay> listOfReplays = new ArrayList<>();
     //private String[] replayList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +43,48 @@ public class ReplaySelection extends AppCompatActivity {
         replayLV = findViewById(R.id.replayLV);
 
         //routeNames = getResources().getStringArray(R.array.routes_array);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, replayList);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, replayList);
         replayLV.setAdapter(adapter);
 
         for (Replay r : data.allReplays.values()) {
             replayList.add(r.title + " - " + r.getDate());
+            listOfReplays.add(r);
         }
 
-        orderTitle();
+        orderDate();
 
-        replayLV.setOnItemClickListener((p,v,pos,id) -> toReplay(pos));
+        Spinner dropDown = findViewById(R.id.dropDown);
+        String[] selection = new String[] { "Date", "Alphabetical" };
+        ArrayAdapter<String>adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,selection);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropDown.setAdapter(adapter2);
+
+        dropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
+                switch (pos) {
+                    case 0:
+                        orderDate();
+                        replayLV.setAdapter(adapter);
+                        break;
+                    case 1:
+                        orderTitle();
+                        replayLV.setAdapter(adapter);
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> p) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        replayLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> p, View v, int pos, long id) {
+                ReplaySelection.this.toReplay(pos);
+            }
+        });
     }
 
     private void orderDate(){
@@ -58,6 +94,18 @@ public class ReplaySelection extends AppCompatActivity {
                 can be used to compare dates
                 but how to order order in an arrayList?
          */
+        Collections.sort(listOfReplays, new Comparator<Replay>() {
+            public int compare(Replay r1, Replay r2) {
+                if (r1.getDate() == null || r2.getDate() == null)
+                    return 0;
+                return r1.getDate().compareTo(r2.getDate());
+            }
+        });
+
+        replayList.clear();
+        for (Replay r : listOfReplays) {
+            replayList.add(r.title + " - " + r.getDate());
+        }
     }
 
     //alphabetical order
@@ -75,4 +123,8 @@ public class ReplaySelection extends AppCompatActivity {
         return str.substring(0, str.length()-22);
     }
 
+    @Override
+    public int compare(Object o1, Object o2) {
+        return 0;
+    }
 }
