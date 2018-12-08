@@ -21,8 +21,9 @@ public class Saved implements Serializable {
     public void add( Replay replay){
         allReplays.put( replay.title.toLowerCase(),replay);
     }
-    public void remove(Replay replay){
-        allReplays.remove(replay.title.toLowerCase());
+
+    public void remove(String key){
+        allReplays.remove(key.toLowerCase());
     }
     public boolean isEmpty(){
         return allReplays.isEmpty();
